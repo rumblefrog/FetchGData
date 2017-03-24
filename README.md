@@ -8,5 +8,9 @@ sm_pdata
 
 - SMJansson (https://forums.alliedmods.net/showthread.php?t=184604)
 
+# Download 
+
+Grab the latest version from the [release](https://github.com/RumbleFrog/FetchPData/releases) page
+
 # License
 MIT

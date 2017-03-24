@@ -33,4 +33,4 @@ deploy:
   skip_cleanup: true
   all_branches: true
   on:
-    tags: true
+    branch: master
