@@ -7,3 +7,6 @@ sm_pdata
 # Prerequisite
 
 - SMJansson (https://forums.alliedmods.net/showthread.php?t=184604)
+
+# License
+MIT
