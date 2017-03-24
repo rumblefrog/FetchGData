@@ -32,4 +32,4 @@ deploy:
   file: "$TRAVIS_BUILD_DIR/addons/sourcemod/scripting/compiled/fetchpdata.smx"
   skip_cleanup: true
   on:
-    branch: master
+    tag: true
