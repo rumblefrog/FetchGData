@@ -24,7 +24,7 @@ before_script:
     - chmod +x compile.sh
     
 script: 
-    - ./compile.sh fetchpdata.sp   
+    - ./compile.s fetchpdata.sp   
   
 deploy:
   provider: releases
