@@ -1,5 +1,8 @@
 # FetchPData
-Return a JSON encoded array of SteamID64 and name pairs
+Return to console a JSON encoded array of SteamID64 and name pairs
+
+# Usage
+sm_pdata
 
 # Prerequisite
 
