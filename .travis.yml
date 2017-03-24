@@ -25,6 +25,9 @@ before_script:
     
 script: 
     - ./compile.sh fetchpdata.sp   
+    
+after_script:
+    - ls ../plugins
 
 deploy:
   provider: releases
