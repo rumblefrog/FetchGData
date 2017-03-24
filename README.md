@@ -15,7 +15,7 @@ sm_pdata
 
 # Download 
 
-Grab the latest version from the [release](https://github.com/RumbleFrog/FetchPData/releases) page
+Download the latest version from the [release](https://github.com/RumbleFrog/FetchPData/releases) page
 
 # License
 MIT
