@@ -6,7 +6,7 @@ sm_pdata
 
 # Prerequisite
 
-- SMJansson (https://forums.alliedmods.net/showthread.php?t=184604)
+- SMJansson Extension (https://forums.alliedmods.net/showthread.php?t=184604)
 
 # Example Output
 ```
