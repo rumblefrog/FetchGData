@@ -31,5 +31,6 @@ deploy:
   api_key: "$githubkey"
   file: "$TRAVIS_BUILD_DIR/addons/sourcemod/scripting/compiled/fetchpdata.smx"
   skip_cleanup: true
+  all_branches: true
   on:
     tags: true
