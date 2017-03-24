@@ -25,14 +25,11 @@ before_script:
     
 script: 
     - ./compile.sh fetchpdata.sp   
-    
-before_deploy:
-    - cd ../plugins
-
+  
 deploy:
   provider: releases
   api_key: "$githubkey"
-  file: "fetchpdata.smx"
+  file: "$TRAVIS_BUILD_DIR/addons/sourcemod/scripting/fetchpdata.smx"
   skip_cleanup: true
   on:
     branch: master
