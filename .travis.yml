@@ -6,10 +6,6 @@ env:
 matrix:
     fast_finish: true
     
-branches:
-  except:
-    - /^v[0-9]/
-    
 before_install:
     - sudo apt-get update
     - sudo apt-get install gcc-multilib
@@ -33,6 +29,9 @@ script:
 deploy:
   provider: releases
   api_key: "$githubkey"
+  branches:
+    except:
+        - /^v[0-9]/
   file: "$TRAVIS_BUILD_DIR/addons/sourcemod/scripting/compiled/fetchpdata.smx"
   skip_cleanup: true
   on:
