@@ -13,13 +13,16 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #pragma semicolon 1
 
 #define PLUGIN_AUTHOR "Fishy"
-#define PLUGIN_VERSION "1.0.0"
+#define PLUGIN_VERSION "1.1.0"
 
 #include <sourcemod>
 #include <sdktools>
 #include <smjansson>
+#tryinclude <tf2>
 
 #pragma newdecls required
+
+char sModName[64];
 
 public Plugin myinfo = 
 {
@@ -33,6 +36,9 @@ public Plugin myinfo =
 public void OnPluginStart()
 {
 	RegAdminCmd("sm_pdata", PData, 0, "Fetch player data");
+	RegAdminCmd("sm_pdatatf", PDataTF, 0, "Fetch team and player data for team fortress 2");
+	
+	GetGameFolderName(sModName, sizeof(sModName));
 }
 
 public Action PData(int client, int args)
@@ -57,6 +63,70 @@ public Action PData(int client, int args)
 	json_dump(jObj, sJson, sizeof(sJson));
 	
 	PrintToConsole(client, "%s", sJson);
+	
+	CloseHandle(jObj);
+	
+	return Plugin_Handled;
+}
+
+public Action PDataTF(int client, int args)
+{
+	if (!StrEqual(sModName, "tf"))
+	{
+		ReplyToCommand(client, "Unsupported Game");
+		return Plugin_Handled;
+	}
+	
+	Handle jObj = json_object();
+	char sJson[4096];
+	
+	Handle jScore = json_object();
+	json_object_set_new(jScore, "blue", json_integer(GetTeamScore(view_as<int>(TFTeam_Blue))));
+	json_object_set_new(jScore, "red", json_integer(GetTeamScore(view_as<int>(TFTeam_Red))));
+	
+	Handle jTeams = json_object();
+	
+	Handle jTeamBlue = json_object();
+	Handle jTeamRed = json_object();
+	Handle jTeamSpectator = json_object();
+	Handle jTeamUnassigned = json_object();
+	
+	for (int i = 1; i <= MaxClients; i++)
+	{
+		if (IsClientInGame(i) && !IsFakeClient(i))
+		{
+			char ID[64];
+			char Player_Name[MAX_NAME_LENGTH];
+			
+			GetClientAuthId(i, AuthId_SteamID64, ID, sizeof(ID));
+			GetClientName(i, Player_Name, sizeof(Player_Name));
+			
+			if (GetClientTeam(i) == view_as<int>(TFTeam_Blue))
+				json_object_set_new(jTeamBlue, ID, json_string(Player_Name));
+				
+			if (GetClientTeam(i) == view_as<int>(TFTeam_Red))
+				json_object_set_new(jTeamRed, ID, json_string(Player_Name));
+				
+			if (GetClientTeam(i) == view_as<int>(TFTeam_Spectator))
+				json_object_set_new(jTeamSpectator, ID, json_string(Player_Name));
+				
+			if (GetClientTeam(i) == view_as<int>(TFTeam_Unassigned))
+				json_object_set_new(jTeamUnassigned, ID, json_string(Player_Name));
+		}
+	}
+	
+	json_object_set_new(jObj, "scores", jScore);
+	json_object_set_new(jTeams, "blue", jTeamBlue);
+	json_object_set_new(jTeams, "red", jTeamRed);
+	json_object_set_new(jTeams, "spectator", jTeamSpectator);
+	json_object_set_new(jTeams, "unassigned", jTeamUnassigned);
+	json_object_set_new(jObj, "teams", jTeams);
+	
+	json_dump(jObj, sJson, sizeof(sJson));
+	
+	PrintToConsole(client, "%s", sJson);
+	
+	CloseHandle(jObj);
 	
 	return Plugin_Handled;
 }
