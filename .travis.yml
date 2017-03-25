@@ -29,9 +29,6 @@ script:
 deploy:
   provider: releases
   api_key: "$githubkey"
-  branches:
-    except:
-        - /^v[0-9]/
   file: "$TRAVIS_BUILD_DIR/addons/sourcemod/scripting/compiled/fetchpdata.smx"
   skip_cleanup: true
   on:
