@@ -1,10 +1,10 @@
-# FetchPData [![Build Status](https://travis-ci.org/RumbleFrog/FetchPData.svg?branch=master)](https://travis-ci.org/RumbleFrog/FetchPData)
+# FetchPData [![Build Status](https://travis-ci.org/RumbleFrog/FetchGData.svg?branch=master)](https://travis-ci.org/RumbleFrog/FetchGData)
 Return to console a JSON encoded array of SteamID64 and name pairs
 
 # Usage
-sm_pdata
+sm_gdata
 
-sm_pdatatf (TF2 Only)
+sm_gdatatf (TF2 Only)
 
 # Prerequisite
 
@@ -12,13 +12,13 @@ sm_pdatatf (TF2 Only)
 
 # Example Outputs
 
-### sm_pdata
+### sm_gdata
 
 ```
 {"76561198114606863":"Fishy | MaxDB.NET"}
 ```
 
-### sm_pdatatf
+### sm_gdatatf
 
 ```
 {
@@ -40,7 +40,7 @@ sm_pdatatf (TF2 Only)
 
 # Download 
 
-Download the latest version from the [release](https://github.com/RumbleFrog/FetchPData/releases) page
+Download the latest version from the [release](https://github.com/RumbleFrog/FetchGData/releases) page
 
 # License
 MIT

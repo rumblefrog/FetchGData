@@ -17,19 +17,19 @@ before_script:
     - SMPACKAGE="https://www.sourcemod.net/smdrop/$SMVERSION/$SMLATEST"
     - wget $SMPACKAGE
     - tar -xzf $(basename "$SMPACKAGE")
-    - cp fetchpdata.sp addons/sourcemod/scripting/
+    - cp fetchgdata.sp addons/sourcemod/scripting/
     - cp include/smjansson.inc addons/sourcemod/scripting/include
     - cd addons/sourcemod/scripting/
     - chmod +x spcomp
     - chmod +x compile.sh
     
 script: 
-    - ./compile.sh fetchpdata.sp   
+    - ./compile.sh fetchgdata.sp   
   
 deploy:
   provider: releases
   api_key: "$githubkey"
-  file: "$TRAVIS_BUILD_DIR/addons/sourcemod/scripting/compiled/fetchpdata.smx"
+  file: "$TRAVIS_BUILD_DIR/addons/sourcemod/scripting/compiled/fetchgdata.smx"
   skip_cleanup: true
   on:
     tags: true

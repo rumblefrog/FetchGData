@@ -26,7 +26,7 @@ char sModName[64];
 
 public Plugin myinfo = 
 {
-	name = "FetchPData",
+	name = "FetchGData",
 	author = PLUGIN_AUTHOR,
 	description = "Fetch player data",
 	version = PLUGIN_VERSION,
@@ -35,13 +35,13 @@ public Plugin myinfo =
 
 public void OnPluginStart()
 {
-	RegAdminCmd("sm_pdata", PData, 0, "Fetch player data");
-	RegAdminCmd("sm_pdatatf", PDataTF, 0, "Fetch team and player data for team fortress 2");
+	RegAdminCmd("sm_gdata", GData, 0, "Fetch player data");
+	RegAdminCmd("sm_gdatatf", GDataTF, 0, "Fetch team and player data for team fortress 2");
 	
 	GetGameFolderName(sModName, sizeof(sModName));
 }
 
-public Action PData(int client, int args)
+public Action GData(int client, int args)
 {
 	Handle jObj = json_object();
 	char sJson[4096];
@@ -69,7 +69,7 @@ public Action PData(int client, int args)
 	return Plugin_Handled;
 }
 
-public Action PDataTF(int client, int args)
+public Action GDataTF(int client, int args)
 {
 	if (!StrEqual(sModName, "tf"))
 	{
