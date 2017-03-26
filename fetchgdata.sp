@@ -160,7 +160,6 @@ stock char GetServerIP(char[] IP, int size)
 		Steam_GetPublicIP(buffer);
 		Format(IP, size, "%d.%d.%d.%d", buffer[0], buffer[1], buffer[2], buffer[3]);
 	} else {
-
 		int pieces[4];
 		int longip = GetConVarInt(FindConVar("hostip"));
 	
