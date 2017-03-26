@@ -1,5 +1,5 @@
 # FetchPData [![Build Status](https://travis-ci.org/RumbleFrog/FetchGData.svg?branch=master)](https://travis-ci.org/RumbleFrog/FetchGData)
-Return to console a JSON encoded array of SteamID64 and name pairs
+Return to console a JSON encoded array of info including SteamID64 and name pairs, and team scores. Perfect for server listing.
 
 # Usage
 sm_gdata
