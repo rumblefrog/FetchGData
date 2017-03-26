@@ -64,7 +64,7 @@ public Action GData(int client, int args)
 	
 	json_object_set_new(jInfo, "ip", json_string(sIP));
 	json_object_set_new(jInfo, "players", json_integer(GetClientCount(false)));
-	json_object_set_new(jInfo, "maxplayers", json_integer(GetMaxHumanPlayer()));
+	json_object_set_new(jInfo, "maxplayers", json_integer(GetMaxHumanPlayers()));
 	json_object_set_new(jInfo, "map", json_string(sMap));
 	json_object_set_new(jInfo, "description", json_string(sDescription));
 	
