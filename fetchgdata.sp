@@ -171,5 +171,4 @@ stock char GetServerIP(char[] IP, int size)
 	
 		Format(IP, size, "%d.%d.%d.%d", pieces[0], pieces[1], pieces[2], pieces[3]);
 	}
-
 }
