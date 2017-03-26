@@ -35,7 +35,7 @@ native Steam_GetPublicIP(octets[4]);
 
 /**
  * Is fired when the Steam master servers report that your server is
- * outdated.
+ * outdated
  *
  * @return Plugin_Continue to continue normal operation or Plugin_Handled
  *         to block the regular console message.
