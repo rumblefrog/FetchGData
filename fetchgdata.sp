@@ -13,7 +13,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #pragma semicolon 1
 
 #define PLUGIN_AUTHOR "Fishy"
-#define PLUGIN_VERSION "1.1.2"
+#define PLUGIN_VERSION "1.1.3"
 
 #include <sourcemod>
 #include <sdktools>
@@ -42,6 +42,8 @@ public void OnPluginStart()
 {
 	RegAdminCmd("sm_gdata", GData, 0, "Fetch team and player data for team fortress 2");
 	RegAdminCmd("sm_gdata_players", GDataPlayers, 0, "Fetch player data");
+	
+	CreateConVar("fetchgdata_version", PLUGIN_VERSION, "FetchGData", FCVAR_SPONLY | FCVAR_REPLICATED | FCVAR_NOTIFY);
 	
 	GetGameFolderName(sModName, sizeof(sModName));
 	GetServerIP(sIP, sizeof(sIP));
