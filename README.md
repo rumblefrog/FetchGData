@@ -1,40 +1,53 @@
-# FetchPData [![Build Status](https://travis-ci.org/RumbleFrog/FetchGData.svg?branch=master)](https://travis-ci.org/RumbleFrog/FetchGData)
-Return to console a JSON encoded array of SteamID64 and name pairs
+# FetchGData [![Build Status](https://travis-ci.org/RumbleFrog/FetchGData.svg?branch=master)](https://travis-ci.org/RumbleFrog/FetchGData)
+Return to console a multidimensional JSON encoded array of basic game information
 
 # Usage
 sm_gdata
 
-sm_gdatatf (TF2 Only)
+sm_gdata_players
 
 # Prerequisite
 
 - SMJansson Extension (https://forums.alliedmods.net/showthread.php?t=184604)
+
+## Optional (Recommended)
+
+- SteamTools Extension (https://builds.limetech.io/?p=steamtools)
 
 # Example Outputs
 
 ### sm_gdata
 
 ```
-{"76561198114606863":"Fishy | MaxDB.NET"}
-```
-
-### sm_gdatatf
-
-```
 {
-    "scores": {
-        "blue": 1,
-        "red": 0
-    },
     "teams": {
-        "unassigned": {
-            "76561198114606863": "Fishy | MaxDB.NET"
-        },
+        "unassigned": {},
         "blue": {},
         "red": {},
-        "spectator": {}
+        "spectator": {
+            "76561198114606863": "Fishy | MaxDB.NET"
+        }
+    },
+    "info": {
+        "map": "tfdb_octagon",
+        "ip": "208.167.243.91",
+        "players": 2,
+        "description": "Team Fortress"
+    },
+    "players": {
+        "76561198114606863": "Fishy | MaxDB.NET"
+    },
+    "scores": {
+        "blue": 0,
+        "red": 0
     }
 }
+```
+
+### sm_gdata_players
+
+```
+{"76561198114606863":"Fishy | MaxDB.NET"}
 ```
 
 
