@@ -1,5 +1,5 @@
 # FetchGData [![Build Status](https://travis-ci.org/RumbleFrog/FetchGData.svg?branch=master)](https://travis-ci.org/RumbleFrog/FetchGData)
-Return to console a multidimensional JSON encoded array of basic game information
+Return to console a multidimensional JSON encoded array of basic game information. Perfect for basic server listing on web end.
 
 # Usage
 sm_gdata
