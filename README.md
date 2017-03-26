@@ -56,4 +56,5 @@ sm_gdata_players
 Download the latest version from the [release](https://github.com/RumbleFrog/FetchGData/releases) page
 
 # License
+
 MIT
