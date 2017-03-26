@@ -8,11 +8,11 @@ sm_gdata_players
 
 # Prerequisite
 
-- SMJansson Extension (https://forums.alliedmods.net/showthread.php?t=184604)
+- [SMJansson Extension](https://forums.alliedmods.net/showthread.php?t=184604)
 
 ## Optional (Recommended)
 
-- SteamTools Extension (https://builds.limetech.io/?p=steamtools)
+- [SteamTools Extension](https://builds.limetech.io/?p=steamtools)
 
 # Example Outputs
 
