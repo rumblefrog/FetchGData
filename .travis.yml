@@ -21,6 +21,7 @@ before_script:
     - cp include/smjansson.inc addons/sourcemod/scripting/include
     - cp include/tf2.inc addons/sourcemod/scripting/include
     - cp include/steamtools.inc addons/sourcemod/scripting/include
+    - cp include/webcon.inc addons/sourcemod/scripting/include
     - cd addons/sourcemod/scripting/
     - chmod +x spcomp
     - chmod +x compile.sh

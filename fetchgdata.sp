@@ -13,14 +13,16 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #pragma semicolon 1
 
 #define PLUGIN_AUTHOR "Fishy"
-#define PLUGIN_VERSION "1.1.4"
+#define PLUGIN_VERSION "1.2.0"
+
+#define Web_ID "FetchGData"
 
 #include <sourcemod>
 #include <sdktools>
 #include <smjansson>
-#undef REQUIRE_PLUGIN
 #include <tf2>
 #include <steamtools>
+#include <webcon>
 
 #pragma newdecls required
 
@@ -28,6 +30,8 @@ char sModName[64];
 char sIP[20];
 char sDescription[64];
 char sMap[64];
+
+WebResponse defaultResponse;
 
 public Plugin myinfo = 
 {
@@ -40,9 +44,11 @@ public Plugin myinfo =
 
 public void OnPluginStart()
 {
-	RegAdminCmd("sm_gdata", GData, 0, "Fetch team and player data for Team Fortress 2");
-	RegAdminCmd("sm_gdata_players", GDataPlayers, 0, "Fetch player data");
-	RegAdminCmd("sm_gdata_extensive", GDataExtensive, 0, "Fetch extensive team and player data for Team Fortress 2");
+	if (!Web_RegisterRequestHandler(Web_ID, OnWebRequest, "FetchGData", "Fetch a multidimensional JSON encoded array of basic game information")) {
+		SetFailState("Failed to register request handler.");
+	}
+	
+	defaultResponse = new WebStringResponse("<!DOCTYPE html>\n<html><body><h1>404 Not Found</h1></body></html>");
 	
 	CreateConVar("fetchgdata_version", PLUGIN_VERSION, "FetchGData", FCVAR_SPONLY | FCVAR_REPLICATED | FCVAR_NOTIFY);
 	
@@ -52,16 +58,59 @@ public void OnPluginStart()
 	GetCurrentMap(sMap, sizeof(sMap));
 }
 
-public Action GData(int client, int args)
+public bool OnWebRequest(WebConnection connection, const char[] method, const char[] url)
+{
+	char address[WEB_CLIENT_ADDRESS_LENGTH];
+	connection.GetClientAddress(address, sizeof(address));
+
+
+	if (StrEqual(url, "/")) {
+		char buffer[16384];
+		
+		GData(buffer, sizeof(buffer));
+		
+		WebResponse response = new WebStringResponse(buffer);
+		bool success = connection.QueueResponse(WebStatus_OK, response);
+		delete response;
+		
+		return success;
+	} 
+
+	if (StrEqual(url, "/players")) {
+		char buffer[16384];
+		
+		GDataPlayers(buffer, sizeof(buffer));
+		
+		WebResponse response = new WebStringResponse(buffer);
+		bool success = connection.QueueResponse(WebStatus_OK, response);
+		delete response;
+		
+		return success;
+	}
+
+	if (StrEqual(url, "/extensive")) {
+		char buffer[16384];
+		
+		GDataExtensive(buffer, sizeof(buffer));
+		
+		WebResponse response = new WebStringResponse(buffer);
+		bool success = connection.QueueResponse(WebStatus_OK, response);
+		delete response;
+		
+		return success;
+	}
+
+	return connection.QueueResponse(WebStatus_NotFound, defaultResponse);
+}
+
+void GData(char[] sJson, int iJson)
 {
 	if (!StrEqual(sModName, "tf"))
 	{
-		ReplyToCommand(client, "Unsupported Game");
-		return Plugin_Handled;
+		return;
 	}
 	
 	Handle jObj = json_object();
-	char sJson[8192];
 	
 	Handle jInfo = json_object();
 	
@@ -120,25 +169,20 @@ public Action GData(int client, int args)
 	json_object_set_new(jObj, "teams", jTeams);
 	json_object_set_new(jObj, "players", jPlayers);
 	
-	json_dump(jObj, sJson, sizeof(sJson));
-	
-	PrintToConsole(client, "%s", sJson);
+	json_dump(jObj, sJson, iJson);
 	
 	CloseHandle(jObj);
 	
-	return Plugin_Handled;
 }
 
-public Action GDataExtensive(int client, int args)
+void GDataExtensive(char[] sJson, int iJson)
 {
 	if (!StrEqual(sModName, "tf"))
 	{
-		ReplyToCommand(client, "Unsupported Game");
-		return Plugin_Handled;
+		return;
 	}
 	
 	Handle jObj = json_object();
-	char sJson[8192];
 	
 	Handle jInfo = json_object();
 	
@@ -204,19 +248,15 @@ public Action GDataExtensive(int client, int args)
 	json_object_set_new(jObj, "teams", jTeams);
 	json_object_set_new(jObj, "players", jPlayers);
 	
-	json_dump(jObj, sJson, sizeof(sJson), 0);
+	json_dump(jObj, sJson, iJson);
 	
-	PrintToConsole(client, "%s", sJson);
 	
 	CloseHandle(jObj);
-	
-	return Plugin_Handled;
 }
 
-public Action GDataPlayers(int client, int args)
+public Action GDataPlayers(char[] sJson, int iJson)
 {
 	Handle jObj = json_object();
-	char sJson[4096];
 	
 	for (int i = 1; i <= MaxClients; i++)
 	{
@@ -232,13 +272,9 @@ public Action GDataPlayers(int client, int args)
 		}
 	}
 	
-	json_dump(jObj, sJson, sizeof(sJson));
-	
-	PrintToConsole(client, "%s", sJson);
+	json_dump(jObj, sJson, iJson);
 	
 	CloseHandle(jObj);
-	
-	return Plugin_Handled;
 }
 
 stock char GetServerIP(char[] IP, int size)
@@ -260,3 +296,4 @@ stock char GetServerIP(char[] IP, int size)
 		Format(IP, size, "%d.%d.%d.%d", pieces[0], pieces[1], pieces[2], pieces[3]);
 	}
 }
+

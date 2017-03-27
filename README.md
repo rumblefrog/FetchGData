@@ -1,21 +1,27 @@
 # FetchGData [![Build Status](https://travis-ci.org/RumbleFrog/FetchGData.svg?branch=master)](https://travis-ci.org/RumbleFrog/FetchGData)
-Return to console a multidimensional JSON encoded array of basic game information. Perfect for server listing on web end.
+An engine-independent web server that returns multidimensional JSON encoded arrays of basic game information. The limit is only your imagination.
+
+# Endpoints
+**/**
+
+**/players**
+
+**/extensive**
 
 # Usage
-sm_gdata
 
-sm_gdata_players
-
-sm_gdata_extensive
+[*] Visit ServerIP:Port/FetchGData in your browser
+[*] Append any endpoints to the end of that URL
 
 # Prerequisite
 
 - [SMJansson Extension](https://forums.alliedmods.net/showthread.php?t=184604)
-- [SteamTools Extension](https://builds.limetech.io/?p=steamtools) (Optional but recommended)
+- [Webcon Extension](https://builds.limetech.io/?p=webcon)
+- [SteamTools Extension](https://builds.limetech.io/?p=steamtools) **(Optional but recommended)**
 
 # Example Outputs
 
-### sm_gdata
+### /
 
 ```
 {
@@ -43,13 +49,13 @@ sm_gdata_extensive
 }
 ```
 
-### sm_gdata_players
+### /players
 
 ```
 {"76561198114606863":"Fishy | MaxDB.NET"}
 ```
 
-### sm_gdata_extensive
+### /extensive
 
 ```
 {
