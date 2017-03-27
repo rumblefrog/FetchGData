@@ -13,7 +13,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #pragma semicolon 1
 
 #define PLUGIN_AUTHOR "Fishy"
-#define PLUGIN_VERSION "1.1.3"
+#define PLUGIN_VERSION "1.1.4"
 
 #include <sourcemod>
 #include <sdktools>
@@ -40,8 +40,9 @@ public Plugin myinfo =
 
 public void OnPluginStart()
 {
-	RegAdminCmd("sm_gdata", GData, 0, "Fetch team and player data for team fortress 2");
+	RegAdminCmd("sm_gdata", GData, 0, "Fetch team and player data for Team Fortress 2");
 	RegAdminCmd("sm_gdata_players", GDataPlayers, 0, "Fetch player data");
+	RegAdminCmd("sm_gdata_extensive", GDataExtensive, 0, "Fetch extensive team and player data for Team Fortress 2");
 	
 	CreateConVar("fetchgdata_version", PLUGIN_VERSION, "FetchGData", FCVAR_SPONLY | FCVAR_REPLICATED | FCVAR_NOTIFY);
 	
@@ -120,6 +121,90 @@ public Action GData(int client, int args)
 	json_object_set_new(jObj, "players", jPlayers);
 	
 	json_dump(jObj, sJson, sizeof(sJson));
+	
+	PrintToConsole(client, "%s", sJson);
+	
+	CloseHandle(jObj);
+	
+	return Plugin_Handled;
+}
+
+public Action GDataExtensive(int client, int args)
+{
+	if (!StrEqual(sModName, "tf"))
+	{
+		ReplyToCommand(client, "Unsupported Game");
+		return Plugin_Handled;
+	}
+	
+	Handle jObj = json_object();
+	char sJson[8192];
+	
+	Handle jInfo = json_object();
+	
+	json_object_set_new(jInfo, "ip", json_string(sIP));
+	json_object_set_new(jInfo, "players", json_integer(GetClientCount(false)));
+	json_object_set_new(jInfo, "maxplayers", json_integer(GetMaxHumanPlayers()));
+	json_object_set_new(jInfo, "map", json_string(sMap));
+	json_object_set_new(jInfo, "description", json_string(sDescription));
+	
+	
+	Handle jScore = json_object();
+	json_object_set_new(jScore, "blue", json_integer(GetTeamScore(view_as<int>(TFTeam_Blue))));
+	json_object_set_new(jScore, "red", json_integer(GetTeamScore(view_as<int>(TFTeam_Red))));
+	
+	Handle jTeams = json_object();
+	
+	Handle jTeamBlue = json_object();
+	Handle jTeamRed = json_object();
+	Handle jTeamSpectator = json_object();
+	Handle jTeamUnassigned = json_object();
+	
+	Handle jPlayers = json_object();
+	
+	for (int i = 1; i <= MaxClients; i++)
+	{
+		if (IsClientInGame(i) && !IsFakeClient(i) && IsClientConnected(i))
+		{
+			char ID[64];
+			char Player_Name[MAX_NAME_LENGTH];
+			Handle jPlayer = json_object();
+			
+			GetClientAuthId(i, AuthId_SteamID64, ID, sizeof(ID));
+			GetClientName(i, Player_Name, sizeof(Player_Name));
+			
+			json_object_set_new(jPlayer, "name", json_string(Player_Name));
+			json_object_set_new(jPlayer, "frags", json_integer(GetClientFrags(i)));
+			json_object_set_new(jPlayer, "latency", json_real(GetClientLatency(i, NetFlow_Both)));
+			json_object_set_new(jPlayer, "streaks", json_integer(GetEntProp(GetPlayerResourceEntity(), Prop_Send, "m_iStreaks", _, i)));
+			json_object_set_new(jPlayer, "dominations", json_integer(GetEntProp(GetPlayerResourceEntity(), Prop_Send, "m_iActiveDominations", _, i)));
+			
+			if (GetClientTeam(i) == view_as<int>(TFTeam_Blue))
+				json_object_set_new(jTeamBlue, ID, jPlayer);
+				
+			if (GetClientTeam(i) == view_as<int>(TFTeam_Red))
+				json_object_set_new(jTeamRed, ID, jPlayer);
+				
+			if (GetClientTeam(i) == view_as<int>(TFTeam_Spectator))
+				json_object_set_new(jTeamSpectator, ID, jPlayer);
+				
+			if (GetClientTeam(i) == view_as<int>(TFTeam_Unassigned))
+				json_object_set_new(jTeamUnassigned, ID, jPlayer);
+			
+			json_object_set_new(jPlayers, ID, json_string(Player_Name));
+		}
+	}
+	
+	json_object_set_new(jObj, "info", jInfo);
+	json_object_set_new(jObj, "scores", jScore);
+	json_object_set_new(jTeams, "blue", jTeamBlue);
+	json_object_set_new(jTeams, "red", jTeamRed);
+	json_object_set_new(jTeams, "spectator", jTeamSpectator);
+	json_object_set_new(jTeams, "unassigned", jTeamUnassigned);
+	json_object_set_new(jObj, "teams", jTeams);
+	json_object_set_new(jObj, "players", jPlayers);
+	
+	json_dump(jObj, sJson, sizeof(sJson), 0);
 	
 	PrintToConsole(client, "%s", sJson);
 	
