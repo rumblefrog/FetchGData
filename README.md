@@ -10,8 +10,8 @@ An engine-independent web server that returns multidimensional JSON encoded arra
 
 # Usage
 
-[*] Visit ServerIP:Port/FetchGData in your browser
-[*] Append any endpoints to the end of that URL
+1. Visit ServerIP:Port/FetchGData in your browser
+2. Append any endpoints to the end of that URL
 
 # Prerequisite
 
