@@ -25,28 +25,31 @@ An engine-independent web server that returns multidimensional JSON encoded arra
 
 ```
 {
-    "teams": {
-        "unassigned": {},
-        "blue": {},
-        "red": {},
-        "spectator": {
-            "76561198114606863": "Fishy | MaxDB.NET"
-        }
-    },
     "info": {
-        "map": "tfdb_octagon",
+        "description": "Team Fortress",
         "ip": "208.167.243.91",
+        "map": "tfdb_greybox",
+        "maxplayers": 20,
         "players": 2,
-        "description": "Team Fortress"
+        "vac": true
     },
     "players": {
         "76561198114606863": "Fishy | MaxDB.NET"
     },
     "scores": {
-        "blue": 0,
+        "blue": 2,
         "red": 0
+    },
+    "teams": {
+        "blue": {},
+        "red": {},
+        "spectator": {},
+        "unassigned": {
+            "76561198114606863": "Fishy | MaxDB.NET"
+        }
     }
 }
+
 ```
 
 ### /players
@@ -59,34 +62,44 @@ An engine-independent web server that returns multidimensional JSON encoded arra
 
 ```
 {
-   "teams":{
-      "unassigned":{},
-      "blue":{},
-      "red":{},
-      "spectator":{
-         "76561198114606863":{
-            "frags":0,
-            "name":"Fishy | MaxDB.NET",
-            "latency":0.058590669184923172,
-            "streaks":0,
-            "dominations":0
-         }
-      }
-   },
-   "info":{
-      "map":"tfdb_blucourt_intox",
-      "ip":"208.167.243.91",
-      "maxplayers":20,
-      "players":2,
-      "description":"Team Fortress"
-   },
-   "players":{
-      "76561198114606863":"Fishy | MaxDB.NET"
-   },
-   "scores":{
-      "blue":0,
-      "red":0
-   }
+    "info": {
+        "description": "Team Fortress",
+        "ip": "208.167.243.91",
+        "map": "tfdb_greybox",
+        "maxplayers": 20,
+        "players": 2,
+        "vac": true
+    },
+    "players": {
+        "76561198114606863": "Fishy | MaxDB.NET"
+    },
+    "scores": {
+        "blue": 2,
+        "red": 0
+    },
+    "teams": {
+        "blue": {},
+        "red": {},
+        "spectator": {},
+        "unassigned": {
+            "76561198114606863": {
+                "country": {
+                    "2LC": "US",
+                    "3LC": "USA",
+                    "Full": "United States"
+                },
+                "damage": 0,
+                "deaths": 0,
+                "dominations": 0,
+                "f2p": false,
+                "frags": 0,
+                "latency": 0.049479279667139053,
+                "name": "Fishy | MaxDB.NET",
+                "streaks": 0,
+                "time": 73.980003356933594
+            }
+        }
+    }
 }
 ```
 

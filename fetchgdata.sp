@@ -13,7 +13,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #pragma semicolon 1
 
 #define PLUGIN_AUTHOR "Fishy"
-#define PLUGIN_VERSION "1.2.0"
+#define PLUGIN_VERSION "1.2.1"
 
 #define Web_ID "FetchGData"
 
@@ -23,6 +23,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include <tf2>
 #include <steamtools>
 #include <webcon>
+#include <geoip>
 
 #pragma newdecls required
 
@@ -30,6 +31,8 @@ char sModName[64];
 char sIP[20];
 char sDescription[64];
 char sMap[64];
+
+bool bSteamTools;
 
 WebResponse defaultResponse;
 
@@ -48,6 +51,8 @@ public void OnPluginStart()
 		SetFailState("Failed to register request handler.");
 	}
 	
+	bSteamTools = LibraryExists("SteamTools");
+	
 	defaultResponse = new WebStringResponse("<!DOCTYPE html>\n<html><body><h1>404 Not Found</h1></body></html>");
 	
 	CreateConVar("fetchgdata_version", PLUGIN_VERSION, "FetchGData", FCVAR_SPONLY | FCVAR_REPLICATED | FCVAR_NOTIFY);
@@ -56,6 +61,14 @@ public void OnPluginStart()
 	GetServerIP(sIP, sizeof(sIP));
 	GetGameDescription(sDescription, sizeof(sDescription));
 	GetCurrentMap(sMap, sizeof(sMap));
+}
+
+public void OnLibraryAdded(const char[] name)
+{
+	if (StrEqual(name, "SteamTools"))
+	{
+		bSteamTools = true;
+	}
 }
 
 public bool OnWebRequest(WebConnection connection, const char[] method, const char[] url)
@@ -119,6 +132,8 @@ void GData(char[] sJson, int iJson)
 	json_object_set_new(jInfo, "maxplayers", json_integer(GetMaxHumanPlayers()));
 	json_object_set_new(jInfo, "map", json_string(sMap));
 	json_object_set_new(jInfo, "description", json_string(sDescription));
+	if (bSteamTools)
+		json_object_set_new(jInfo, "vac", json_boolean(Steam_IsVACEnabled()));
 	
 	
 	Handle jScore = json_object();
@@ -169,7 +184,7 @@ void GData(char[] sJson, int iJson)
 	json_object_set_new(jObj, "teams", jTeams);
 	json_object_set_new(jObj, "players", jPlayers);
 	
-	json_dump(jObj, sJson, iJson);
+	json_dump(jObj, sJson, iJson, 4, true, true);
 	
 	CloseHandle(jObj);
 	
@@ -191,6 +206,8 @@ void GDataExtensive(char[] sJson, int iJson)
 	json_object_set_new(jInfo, "maxplayers", json_integer(GetMaxHumanPlayers()));
 	json_object_set_new(jInfo, "map", json_string(sMap));
 	json_object_set_new(jInfo, "description", json_string(sDescription));
+	if (bSteamTools)
+		json_object_set_new(jInfo, "vac", json_boolean(Steam_IsVACEnabled()));
 	
 	
 	Handle jScore = json_object();
@@ -212,16 +229,39 @@ void GDataExtensive(char[] sJson, int iJson)
 		{
 			char ID[64];
 			char Player_Name[MAX_NAME_LENGTH];
+			char IP[64];
+			
+			char CountryFull[45];
+			char Country3LC[4];
+			char Country2LC[3];
+			
 			Handle jPlayer = json_object();
+			Handle jCountry = json_object();
 			
 			GetClientAuthId(i, AuthId_SteamID64, ID, sizeof(ID));
 			GetClientName(i, Player_Name, sizeof(Player_Name));
+			GetClientIP(i, IP, sizeof(IP));
 			
+			GeoipCountry(IP, CountryFull, sizeof(CountryFull));
+			GeoipCode3(IP, Country3LC);
+			GeoipCode2(IP, Country2LC);
+						
 			json_object_set_new(jPlayer, "name", json_string(Player_Name));
 			json_object_set_new(jPlayer, "frags", json_integer(GetClientFrags(i)));
+			json_object_set_new(jPlayer, "deaths", json_integer(GetClientDeaths(i)));
+			json_object_set_new(jPlayer, "dominations", json_integer(GetEntProp(GetPlayerResourceEntity(), Prop_Send, "m_iActiveDominations", _, i)));
+			json_object_set_new(jPlayer, "damage", json_integer(GetEntProp(GetPlayerResourceEntity(), Prop_Send, "m_iDamage", _, i)));
 			json_object_set_new(jPlayer, "latency", json_real(GetClientLatency(i, NetFlow_Both)));
 			json_object_set_new(jPlayer, "streaks", json_integer(GetEntProp(GetPlayerResourceEntity(), Prop_Send, "m_iStreaks", _, i)));
-			json_object_set_new(jPlayer, "dominations", json_integer(GetEntProp(GetPlayerResourceEntity(), Prop_Send, "m_iActiveDominations", _, i)));
+			json_object_set_new(jPlayer, "time", json_real(GetClientTime(i)));		
+			if (bSteamTools)
+				json_object_set_new(jPlayer, "f2p", json_boolean(Steam_CheckClientDLC(i, 459)));
+			
+			json_object_set_new(jCountry, "Full", json_string(CountryFull));
+			json_object_set_new(jCountry, "3LC", json_string(Country3LC));
+			json_object_set_new(jCountry, "2LC", json_string(Country2LC));
+			
+			json_object_set_new(jPlayer, "country", jCountry);
 			
 			if (GetClientTeam(i) == view_as<int>(TFTeam_Blue))
 				json_object_set_new(jTeamBlue, ID, jPlayer);
@@ -248,7 +288,7 @@ void GDataExtensive(char[] sJson, int iJson)
 	json_object_set_new(jObj, "teams", jTeams);
 	json_object_set_new(jObj, "players", jPlayers);
 	
-	json_dump(jObj, sJson, iJson);
+	json_dump(jObj, sJson, iJson, 4, true, true);
 	
 	
 	CloseHandle(jObj);
@@ -272,14 +312,14 @@ public Action GDataPlayers(char[] sJson, int iJson)
 		}
 	}
 	
-	json_dump(jObj, sJson, iJson);
+	json_dump(jObj, sJson, iJson, 4, true, true);
 	
 	CloseHandle(jObj);
 }
 
 stock char GetServerIP(char[] IP, int size)
 {
-	if (LibraryExists("steamtools"))
+	if (bSteamTools)
 	{
 		int buffer[4];
 		Steam_GetPublicIP(buffer);
