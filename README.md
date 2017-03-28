@@ -49,7 +49,6 @@ An engine-independent web server that returns multidimensional JSON encoded arra
         }
     }
 }
-
 ```
 
 ### /players
