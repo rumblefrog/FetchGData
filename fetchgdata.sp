@@ -13,7 +13,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #pragma semicolon 1
 
 #define PLUGIN_AUTHOR "Fishy"
-#define PLUGIN_VERSION "1.2.1"
+#define PLUGIN_VERSION "1.2.2"
 
 #define Web_ID "FetchGData"
 
@@ -236,7 +236,6 @@ void GDataExtensive(char[] sJson, int iJson)
 			char Country2LC[3];
 			
 			Handle jPlayer = json_object();
-			Handle jCountry = json_object();
 			
 			GetClientAuthId(i, AuthId_SteamID64, ID, sizeof(ID));
 			GetClientName(i, Player_Name, sizeof(Player_Name));
@@ -257,11 +256,10 @@ void GDataExtensive(char[] sJson, int iJson)
 			if (bSteamTools)
 				json_object_set_new(jPlayer, "f2p", json_boolean(Steam_CheckClientDLC(i, 459)));
 			
-			json_object_set_new(jCountry, "Full", json_string(CountryFull));
-			json_object_set_new(jCountry, "3LC", json_string(Country3LC));
-			json_object_set_new(jCountry, "2LC", json_string(Country2LC));
+			json_object_set_new(jPlayer, "Full_Country", json_string(CountryFull));
+			json_object_set_new(jPlayer, "3LC_Country", json_string(Country3LC));
+			json_object_set_new(jPlayer, "2LC_Country", json_string(Country2LC));
 			
-			json_object_set_new(jPlayer, "country", jCountry);
 			
 			if (GetClientTeam(i) == view_as<int>(TFTeam_Blue))
 				json_object_set_new(jTeamBlue, ID, jPlayer);
