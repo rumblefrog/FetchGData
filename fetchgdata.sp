@@ -13,7 +13,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #pragma semicolon 1
 
 #define PLUGIN_AUTHOR "Fishy"
-#define PLUGIN_VERSION "1.2.2"
+#define PLUGIN_VERSION "1.2.3"
 
 #define Web_ID "FetchGData"
 
@@ -184,7 +184,7 @@ void GData(char[] sJson, int iJson)
 	json_object_set_new(jObj, "teams", jTeams);
 	json_object_set_new(jObj, "players", jPlayers);
 	
-	json_dump(jObj, sJson, iJson, 4, true, true);
+	json_dump(jObj, sJson, iJson, 4, false, true);
 	
 	CloseHandle(jObj);
 	
@@ -286,7 +286,7 @@ void GDataExtensive(char[] sJson, int iJson)
 	json_object_set_new(jObj, "teams", jTeams);
 	json_object_set_new(jObj, "players", jPlayers);
 	
-	json_dump(jObj, sJson, iJson, 4, true, true);
+	json_dump(jObj, sJson, iJson, 4, false, true);
 	
 	
 	CloseHandle(jObj);
@@ -310,7 +310,7 @@ public Action GDataPlayers(char[] sJson, int iJson)
 		}
 	}
 	
-	json_dump(jObj, sJson, iJson, 4, true, true);
+	json_dump(jObj, sJson, iJson, 4, false, true);
 	
 	CloseHandle(jObj);
 }
