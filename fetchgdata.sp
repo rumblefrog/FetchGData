@@ -102,7 +102,7 @@ public bool OnWebRequest(WebConnection connection, const char[] method, const ch
 	}
 
 	if (StrEqual(url, "/extensive")) {
-		char buffer[16384];
+		char buffer[32768];
 		
 		GDataExtensive(buffer, sizeof(buffer));
 		
