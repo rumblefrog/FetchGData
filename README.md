@@ -64,7 +64,7 @@ An engine-independent web server that returns multidimensional JSON encoded arra
     "info": {
         "description": "Team Fortress",
         "ip": "208.167.243.91",
-        "map": "tfdb_greybox",
+        "map": "tfdb_blucourt_intox",
         "maxplayers": 20,
         "players": 2,
         "vac": true
@@ -73,33 +73,32 @@ An engine-independent web server that returns multidimensional JSON encoded arra
         "76561198114606863": "Fishy | MaxDB.NET"
     },
     "scores": {
-        "blue": 2,
+        "blue": 0,
         "red": 0
     },
     "teams": {
         "blue": {},
         "red": {},
-        "spectator": {},
-        "unassigned": {
+        "spectator": {
             "76561198114606863": {
-                "country": {
-                    "2LC": "US",
-                    "3LC": "USA",
-                    "Full": "United States"
-                },
+                "2LC_Country": "US",
+                "3LC_Country": "USA",
+                "Full_Country": "United States",
                 "damage": 0,
                 "deaths": 0,
                 "dominations": 0,
                 "f2p": false,
                 "frags": 0,
-                "latency": 0.049479279667139053,
+                "latency": 0.041514847427606583,
                 "name": "Fishy | MaxDB.NET",
                 "streaks": 0,
-                "time": 73.980003356933594
+                "time": 149.23020935058594
             }
-        }
+        },
+        "unassigned": {}
     }
 }
+
 ```
 
 # Download 
