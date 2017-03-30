@@ -11,9 +11,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 **/
 
 #pragma semicolon 1
+#pragma dynamic 32768
 
 #define PLUGIN_AUTHOR "Fishy"
-#define PLUGIN_VERSION "1.2.3"
+#define PLUGIN_VERSION "1.2.5"
 
 #define Web_ID "FetchGData"
 
@@ -58,9 +59,13 @@ public void OnPluginStart()
 	CreateConVar("fetchgdata_version", PLUGIN_VERSION, "FetchGData", FCVAR_SPONLY | FCVAR_REPLICATED | FCVAR_NOTIFY);
 	
 	GetGameFolderName(sModName, sizeof(sModName));
-	GetServerIP(sIP, sizeof(sIP));
 	GetGameDescription(sDescription, sizeof(sDescription));
 	GetCurrentMap(sMap, sizeof(sMap));
+}
+
+public void OnAllPluginsLoaded()
+{
+	GetServerIP(sIP, sizeof(sIP));
 }
 
 public void OnLibraryAdded(const char[] name)
@@ -68,6 +73,7 @@ public void OnLibraryAdded(const char[] name)
 	if (StrEqual(name, "SteamTools"))
 	{
 		bSteamTools = true;
+		GetServerIP(sIP, sizeof(sIP));
 	}
 }
 
