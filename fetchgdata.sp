@@ -65,7 +65,8 @@ public void OnPluginStart()
 
 public void OnAllPluginsLoaded()
 {
-	GetServerIP(sIP, sizeof(sIP));
+	if (!bSteamTools || !Steam_IsConnected())
+		GetServerIP(sIP, sizeof(sIP));
 }
 
 public void OnLibraryAdded(const char[] name)
@@ -321,23 +322,30 @@ public Action GDataPlayers(char[] sJson, int iJson)
 	CloseHandle(jObj);
 }
 
-stock char GetServerIP(char[] IP, int size)
+public int Steam_SteamServersConnected()
 {
-	if (bSteamTools)
-	{
-		int buffer[4];
-		Steam_GetPublicIP(buffer);
-		Format(IP, size, "%d.%d.%d.%d", buffer[0], buffer[1], buffer[2], buffer[3]);
-	} else {
-		int pieces[4];
-		int longip = GetConVarInt(FindConVar("hostip"));
-	
-		pieces[0] = (longip >> 24) & 0x000000FF;
-		pieces[1] = (longip >> 16) & 0x000000FF;
-		pieces[2] = (longip >> 8) & 0x000000FF;
-		pieces[3] = longip & 0x000000FF;
-	
-		Format(IP, size, "%d.%d.%d.%d", pieces[0], pieces[1], pieces[2], pieces[3]);
-	}
+	int buffer[4];
+	Steam_GetPublicIP(buffer);
+	Format(sIP, sizeof sIP, "%d.%d.%d.%d", buffer[0], buffer[1], buffer[2], buffer[3]);
 }
 
+public int Steam_FullyLoaded() {
+	bSteamTools = true;
+}
+
+public int Steam_Shutdown() {
+	bSteamTools = false;
+}
+
+stock char GetServerIP(char[] IP, int size)
+{
+	int pieces[4];
+	int longip = GetConVarInt(FindConVar("hostip"));
+	
+	pieces[0] = (longip >> 24) & 0x000000FF;
+	pieces[1] = (longip >> 16) & 0x000000FF;
+	pieces[2] = (longip >> 8) & 0x000000FF;
+	pieces[3] = longip & 0x000000FF;
+	
+	Format(IP, size, "%d.%d.%d.%d", pieces[0], pieces[1], pieces[2], pieces[3]);
+}
