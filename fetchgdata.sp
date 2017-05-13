@@ -14,7 +14,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #pragma dynamic 32768
 
 #define PLUGIN_AUTHOR "Fishy"
-#define PLUGIN_VERSION "1.2.5"
+#define PLUGIN_VERSION "1.2.6"
 
 #define Web_ID "FetchGData"
 
@@ -76,6 +76,11 @@ public void OnLibraryAdded(const char[] name)
 		bSteamTools = true;
 		GetServerIP(sIP, sizeof(sIP));
 	}
+}
+
+public void OnMapStart()
+{
+	GetCurrentMap(sMap, sizeof(sMap));
 }
 
 public bool OnWebRequest(WebConnection connection, const char[] method, const char[] url)
