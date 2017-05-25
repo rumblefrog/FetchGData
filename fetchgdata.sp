@@ -21,7 +21,7 @@
 #pragma dynamic 32768
 
 #define PLUGIN_AUTHOR "Fishy"
-#define PLUGIN_VERSION "1.2.7"
+#define PLUGIN_VERSION "1.2.8"
 
 #define Web_ID "FetchGData"
 
@@ -31,7 +31,6 @@
 #include <tf2>
 #include <webcon>
 #include <geoip>
-#undef REQUIRE_EXTENSIONS
 #include <steamtools>
 
 #pragma newdecls required
@@ -75,6 +74,8 @@ public void OnAllPluginsLoaded()
 {
 	if (!bSteamTools || !Steam_IsConnected())
 		GetServerIP(sIP, sizeof(sIP));
+	else
+		ST_GetIP();
 }
 
 public void OnLibraryAdded(const char[] name)
@@ -335,7 +336,13 @@ public Action GDataPlayers(char[] sJson, int iJson)
 	CloseHandle(jObj);
 }
 
+//For some reason, this forward isn't being called
 public int Steam_SteamServersConnected()
+{
+	ST_GetIP();
+}
+
+void ST_GetIP()
 {
 	int buffer[4];
 	Steam_GetPublicIP(buffer);
