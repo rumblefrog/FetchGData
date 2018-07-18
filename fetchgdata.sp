@@ -21,7 +21,7 @@
 #pragma dynamic 32768
 
 #define PLUGIN_AUTHOR "Fishy"
-#define PLUGIN_VERSION "1.2.8"
+#define PLUGIN_VERSION "1.2.9"
 
 #define Web_ID "FetchGData"
 
@@ -104,7 +104,11 @@ public bool OnWebRequest(WebConnection connection, const char[] method, const ch
 		GData(buffer, sizeof(buffer));
 		
 		WebResponse response = new WebStringResponse(buffer);
+		
+		response.AddHeader("Access-Control-Allow-Origin", "*");
+		
 		bool success = connection.QueueResponse(WebStatus_OK, response);
+		
 		delete response;
 		
 		return success;
@@ -116,7 +120,11 @@ public bool OnWebRequest(WebConnection connection, const char[] method, const ch
 		GDataPlayers(buffer, sizeof(buffer));
 		
 		WebResponse response = new WebStringResponse(buffer);
+		
+		response.AddHeader("Access-Control-Allow-Origin", "*");
+		
 		bool success = connection.QueueResponse(WebStatus_OK, response);
+		
 		delete response;
 		
 		return success;
@@ -128,7 +136,11 @@ public bool OnWebRequest(WebConnection connection, const char[] method, const ch
 		GDataExtensive(buffer, sizeof(buffer));
 		
 		WebResponse response = new WebStringResponse(buffer);
+		
+		response.AddHeader("Access-Control-Allow-Origin", "*");
+		
 		bool success = connection.QueueResponse(WebStatus_OK, response);
+		
 		delete response;
 		
 		return success;
