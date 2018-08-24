@@ -107,4 +107,4 @@ Download the latest version from the [release](https://github.com/RumbleFrog/Fet
 
 # License
 
-MIT
+GPL 3.0
